@@ -66,8 +66,19 @@ try{
                 <td><input type="text" name="codePatient" ></td>
             </tr>
             <tr>
-                <td>codeMedecin :</td>
-                <td><input type="text" name="codeMedecin"></td>
+            <td>code Medecin : </td>
+                <td>
+                    <select name="codeMedecin" id="CM" name="codeMedcin" >
+                        <?php 
+                            $res=$conn->query("SELECT codeMedecin from medecin");
+                            $res->execute();
+                            while($coll=$res->fetch(PDO::FETCH_ASSOC)){
+                                echo "<option ";
+                                echo ">".$coll['codeMedecin']."</option>";
+                            }
+                        ?>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td><input type="submit" value="AJOUTER RDV" name="submit"></td>
@@ -101,7 +112,7 @@ try{
                 <table>
                     <tr>
                         <td>codePatient :</td>
-                        <td><input type="text" vlaue='.$_POST['codePatient'].'name="codePatient" ></td>
+                        <td><input type="text" name="codePatient2" ></td>
                     </tr>
                     <tr>
                         <td>nom patient :</td>
@@ -121,13 +132,20 @@ try{
                          femme :<input type="radio" name="sexe" value="femme"></td> 
                     </tr>
                     <tr>
-                        <td><input type="submit" value="ajouter Patient" name="submit"></td>
+                        <td><input type="submit" value="ajouter Patient" name="AJP"></td>
                     </tr>
                 </table>
             </form>';
             }
         }
-        
+        if(isset($_POST['AJP'])){
+            $resultAjo=$conn->prepare('INSERT into patient values(?,?,?,?,?)');
+            try{
+                $resultAjo->execute([$_POST["codePatient2"],$_POST["nompatient"],$_POST['adressePatient'],$_POST["datenais"],$_POST["sexe"]]);
+
+            }catch (PDOException $e) {
+                $message = "L'ajout a rencontré le probléme suivant: ". $e->getMessage();
+        }}
     ?>
 </div>
 
